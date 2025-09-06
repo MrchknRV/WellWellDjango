@@ -1,0 +1,41 @@
+[
+  {
+    "model": "catalog.product",
+    "pk": 9,
+    "fields": {
+      "product_name": "Умные часы Apple Watch Series 9",
+      "product_description": "Новейшие умные часы от Apple с расширенными функциями здоровья и fitness-трекингом.\n\nХарактеристики:\n- Дисплей Retina LTPO OLED\n- Датчик крови и EKG\n- GPS и Always-On display\n- До 18 часов работы от аккумулятора\n- Водонепроницаемость 50м",
+      "product_image": "photos/apple_watch_9.jpg",
+      "category": 1,
+      "product_price": 45990,
+      "created_at": "2024-04-05T14:20:00Z",
+      "updated_at": "2024-04-05T14:20:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 10,
+    "fields": {
+      "product_name": "Куртка зимняя пуховая",
+      "product_description": "Теплая пуховая куртка для суровых зимних условий. Идеальна для активного отдыха и городской носки.\n\nОсобенности:\n- Наполнитель: гусиный пух 90/10\n- Водоотталкивающая пропитка\n- Съемный капюшон с мехом\n- 6 карманов для хранения\n- Температурный режим: до -30°C",
+      "product_image": "photos/winter_jacket.jpg",
+      "category": 2,
+      "product_price": 12990,
+      "created_at": "2024-04-08T11:30:00Z",
+      "updated_at": "2024-04-10T09:45:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 11,
+    "fields": {
+      "product_name": "Йога-мат премиум класса",
+      "product_description": "Профессиональный коврик для йоги с повышенным сцеплением и амортизацией.\n\nПреимущества:\n- Толщина 6мм для комфорта суставов\n- Антискользящее покрытие\n- Экологичные материалы (натуральный каучук)\n- Размер 183x61см\n- Легко очищается\n- В комплекте: ремень для переноски",
+      "product_image": "photos/yoga_mat.jpg",
+      "category": 4,
+      "product_price": 5490,
+      "created_at": "2024-04-12T13:15:00Z",
+      "updated_at": "2024-04-12T13:15:00Z"
+    }
+  }
+]

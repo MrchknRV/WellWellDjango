@@ -1,0 +1,138 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "category_name": "Электроника",
+      "category_description": "Современная электроника и гаджеты для повседневного использования. Смартфоны, ноутбуки, планшеты и аксессуары."
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "category_name": "Одежда",
+      "category_description": "Модная одежда для мужчин, женщин и детей. От повседневной до деловой одежды."
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+      "category_name": "Книги",
+      "category_description": "Художественная и образовательная литература. Бестселлеры, классика и учебные пособия."
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 4,
+    "fields": {
+      "category_name": "Спорт",
+      "category_description": "Спортивные товары и оборудование для занятий фитнесом, туризмом и активным отдыхом."
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+      "product_name": "Смартфон Samsung Galaxy S23",
+      "product_description": "Флагманский смартфон с процессором Snapdragon 8 Gen 2, 8GB RAM, 256GB памяти. Камера 200MP.\n\nОсобенности:\n- Дисплей 6.1\" Dynamic AMOLED 120Hz\n- Аккумулятор 3900 mAh\n- Поддержка 5G\n- Защита IP68",
+      "product_image": "photos/samsung_s23.jpg",
+      "category": 1,
+      "product_price": 79990,
+      "created_at": "2024-03-15T10:30:00Z",
+      "updated_at": "2024-03-15T10:30:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+      "product_name": "Ноутбук ASUS ROG Strix",
+      "product_description": "Игровой ноутбук с процессором Intel Core i9, видеокартой NVIDIA RTX 4070, 32GB RAM, SSD 1TB.\n\nХарактеристики:\n- Дисплей 15.6\" IPS 240Hz\n- RGB подсветка клавиатуры\n- Система охлаждения Liquid Metal\n- Порты: HDMI, USB-C, Thunderbolt 4",
+      "product_image": "photos/asus_rog.jpg",
+      "category": 1,
+      "product_price": 149990,
+      "created_at": "2024-03-10T14:25:00Z",
+      "updated_at": "2024-03-12T16:45:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+      "product_name": "Джинсы классические",
+      "product_description": "Классические прямые джинсы из хлопка с небольшим содержанием эластана для комфорта.\n\nДетали:\n- Состав: 98% хлопок, 2% эластан\n- Пять карманов\n- Застежка на молнию и пуговицу\n- Доступны размеры от 44 до 56",
+      "product_image": "photos/jeans_classic.jpg",
+      "category": 2,
+      "product_price": 3499,
+      "created_at": "2024-03-20T09:15:00Z",
+      "updated_at": "2024-03-20T09:15:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 4,
+    "fields": {
+      "product_name": "Футболка хлопковая",
+      "product_description": "Мягкая хлопковая футболка для повседневной носки. Отлично сочетается с джинсами и шортами.\n\nОсобенности:\n- 100% хлопок\n- Классический крой\n- Устойчивая к стирке краска\n- Несколько цветов в наличии",
+      "product_image": "photos/cotton_tshirt.jpg",
+      "category": 2,
+      "product_price": 1299,
+      "created_at": "2024-03-18T11:20:00Z",
+      "updated_at": "2024-03-22T13:30:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 5,
+    "fields": {
+      "product_name": "Война и мир - Л.Н. Толстой",
+      "product_description": "Великий роман-эпопея Льва Толстого, описывающий русское общество во времена войн с Наполеоном.\n\nИздание включает:\n- Все четыре тома\n- Иллюстрации и комментарии\n- Твердый переплет\n- 1376 страниц",
+      "product_image": "photos/war_and_peace.jpg",
+      "category": 3,
+      "product_price": 1899,
+      "created_at": "2024-03-25T16:30:00Z",
+      "updated_at": "2024-03-25T16:30:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 6,
+    "fields": {
+      "product_name": "Python для начинающих",
+      "product_description": "Подробное руководство по изучению Python с нуля. Практические примеры и задания.\n\nСодержание:\n- Основы синтаксиса\n- Структуры данных\n- ООП в Python\n- Работа с файлами\n- Веб-разработка",
+      "product_image": "photos/python_book.jpg",
+      "category": 3,
+      "product_price": 2499,
+      "created_at": "2024-03-22T14:45:00Z",
+      "updated_at": "2024-03-28T10:15:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 7,
+    "fields": {
+      "product_name": "Беговая дорожка электрическая",
+      "product_description": "Профессиональная беговая дорожка для домашних тренировок. Регулировка скорости и наклона.\n\nФункции:\n- Мощность двигателя 2.5 л.с.\n- Максимальная скорость 16 км/ч\n- LCD дисплей с показателями\n- Система амортизации",
+      "product_image": "photos/treadmill.jpg",
+      "category": 4,
+      "product_price": 45990,
+      "created_at": "2024-03-28T12:00:00Z",
+      "updated_at": "2024-03-30T15:20:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 8,
+    "fields": {
+      "product_name": "Гантели наборные",
+      "product_description": "Набор разборных гантелей с блинами. Идеально для силовых тренировок дома.\n\nКомплектация:\n- 2 грифа\n- 12 блинов по 1 кг\n- 4 блина по 2.5 кг\n- 4 замка\n- Максимальный вес: 20 кг на гантель",
+      "product_image": "photos/dumbbells.jpg",
+      "category": 4,
+      "product_price": 8999,
+      "created_at": "2024-03-30T08:45:00Z",
+      "updated_at": "2024-04-01T11:30:00Z"
+    }
+  }
+]
