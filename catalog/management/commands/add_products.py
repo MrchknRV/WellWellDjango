@@ -6,5 +6,5 @@ class Command(BaseCommand):
     help = 'Added test product to the BD'
 
     def handle(self, *args, **options):
-        Product.object.all().delete()
+        Product.objects.all().delete()
         call_command('loaddata', 'test_product_fixture.json')
