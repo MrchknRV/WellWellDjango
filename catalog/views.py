@@ -1,10 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 
-
-def home(request):
-    return render(request, 'catalog/home.html')
-
+from catalog.models import Product
 
 def contacts(request):
     if request.method == "POST":
@@ -14,3 +11,13 @@ def contacts(request):
         print(f'{name} - {phone}: {message}')
         return HttpResponse(f'Thank you {name}! Your message success.')
     return render(request, 'catalog/contacts.html')
+
+
+def product_list(request):
+    products = Product.objects.all()
+    return render(request, 'catalog/home.html', {'products': products})
+
+
+def product_detail(request, id):
+    product = get_object_or_404(Product, id=id)
+    return render(request, 'catalog/product.html', {'product': product})
