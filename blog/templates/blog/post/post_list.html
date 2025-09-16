@@ -1,0 +1,22 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Список постов</h1>
+</div>
+
+<div class="container mt-4">
+    <a href="{% url 'blog:post_create' %}" class="btn btn-primary mb-3 btn-lg">Создать новый пост</a>
+    <div class="list-group">
+        {% for post in posts %}
+        <a href="{% url 'blog:post_detail' post.pk%}" class="list-group-item list-group-item-action">
+            <h5 class="mb-1">{{ post.title }}</h5>
+            <small>Создан: {{ post.created_at|date:'d.m.Y' }} | Последнее обновление {{ post.updated_at|date:'d.m.Y' }}</small><br>
+            <small>Содержимое: {{ post.body|truncatewords:20|linebreaks }}</small><br>
+            <small><u>Просмотров:</u> {{ post.views_count }}</small>
+        </a>
+        {% empty %}
+        <div class="alert alert-warning b">Посты отсутствуют.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

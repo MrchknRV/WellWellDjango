@@ -15,8 +15,9 @@ class Post(models.Model):
     image = models.ImageField(upload_to='photos/blog/', verbose_name='Фотография', blank=True)
     publish_at = models.DateTimeField(default=timezone.now, verbose_name="Дата публикации")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
-    update_at = models.DateTimeField(auto_now=True, verbose_name="Последнее обновление")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Последнее обновление")
     status = models.CharField(max_length=2, choices=Status.choices, default=Status.DRAFT, verbose_name="Статус")
+    views_count = models.PositiveIntegerField(default=0, verbose_name="Количество просмотров")
     objects = models.Manager()
     published = PublishedManager()
 
