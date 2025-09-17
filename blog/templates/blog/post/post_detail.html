@@ -1,0 +1,22 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Создан: {{ post.created_at|date:'d.m.Y' }} | Просмотров:
+                {{ post.views_count }}</h6>
+            {% if post.image %}
+            <img src="{{ post.image.url }}" class="card-img-top" alt="Превью"
+                 style="max-width: 100%; height: auto; width: auto; max-height: 200px;">
+            {% endif %}
+            <p class="card-text">{{ post.body }}</p>
+        </div>
+    </div>
+    <div class="mt-3">
+        <a href="{% url 'blog:post_update' post.pk %}" class="btn btn-warning btn-lg">Редактировать</a>
+        <a href="{% url 'blog:post_delete' post.pk %}" class="btn btn-danger btn-lg">Удалить</a>
+        <a href="{% url 'blog:post_list' %}" class="btn btn-secondary btn-lg">Назад к списку</a>
+    </div>
+</div>
+{% endblock %}
