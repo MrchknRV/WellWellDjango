@@ -18,6 +18,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Последнее обновление")
     status = models.CharField(max_length=2, choices=Status.choices, default=Status.DRAFT, verbose_name="Статус")
     views_count = models.PositiveIntegerField(default=0, verbose_name="Количество просмотров")
+    is_active = models.BooleanField(default=True, verbose_name="Статус публикации")
     objects = models.Manager()
     published = PublishedManager()
 
@@ -27,5 +28,5 @@ class Post(models.Model):
     class Meta:
         verbose_name = "пост"
         verbose_name_plural = "посты"
-        ordering = ["publish_at"]
-        indexes = [models.Index(fields=["publish_at"])]
+        ordering = ["-publish_at"]
+        indexes = [models.Index(fields=["-publish_at"])]

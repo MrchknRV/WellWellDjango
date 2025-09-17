@@ -1,13 +1,12 @@
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
-from jedi.inference.flow_analysis import Status
 
 from .models import Post
 
 
 class PostModelCreate(CreateView):
     model = Post
-    fields = ["title", "body", "image", "status"]
+    fields = ["title", "body", "image", "status", "is_active"]
     template_name = 'blog/post/post_form.html'
     success_url = reverse_lazy("blog:post_list")
 
@@ -23,6 +22,9 @@ class PostModelListView(ListView):
     model = Post
     template_name = "blog/post/post_list.html"
     context_object_name = "posts"
+
+    def get_queryset(self):
+        return Post.objects.filter(is_active=True)
 
 
 class PostModelDetailView(DetailView):
