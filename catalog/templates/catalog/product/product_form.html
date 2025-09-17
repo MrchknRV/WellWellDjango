@@ -1,0 +1,42 @@
+{% extends "catalog/base.html" %}
+{% block title %}
+{% if product %}Редактировать товар: {{ product.name }}{% else %}Создать товар{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4">
+        {% if product %}Редактировать товар{% else %}Создать товар{% endif %}
+    </h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {% if field.name == 'image' %}
+            {{ field }}
+            <small class="form-text text-muted">
+                Загрузите изображение (максимум 5 MB). Допустимые форматы: JPEG, PNG.
+            </small>
+            {% else %}
+            {{ field }}
+            {% endif %}
+            {% if field.errors %}
+            <div class="alert alert-danger">
+                {{ field.errors }}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary btn-lg">
+                {% if product %}Сохранить{% else %}Сохранить{% endif %}
+            </button>
+            <a href="{% url 'catalog:product_list' %}" class="btn btn-secondary btn-lg">Назад</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

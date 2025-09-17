@@ -1,0 +1,24 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Список категорий</h1>
+</div>
+
+<div class="container mt-4">
+    <div class="form-group mt-3">
+        <a href="{% url 'catalog:product_list' %}" class="btn btn-secondary btn-lg">Назад</a>
+    </div>
+    <a href="{% url 'catalog:category_create' %}" class="btn btn-primary mb-3 btn-lg">Создать новую категорию</a>
+    <div class="list-group">
+        {% for category in categories %}
+        <div class="card">
+            <h5 class="mb-1">{{ category.name }}</h5>
+            <small>Содержимое: {{ category.description|truncatewords:20|linebreaks }}</small><br>
+        </div>
+        {% empty %}
+        <div class="alert alert-warning b">Категории отсутствуют.</div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

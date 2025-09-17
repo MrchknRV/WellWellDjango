@@ -1,6 +1,10 @@
 {% extends 'catalog/base.html' %}
 {% load tags %}
 {% block content %}
+<div class="container mt-4">
+    <a href="{% url 'catalog:product_create' %}" class="btn btn-primary mb-3 btn-lg">Создать новый товар</a>
+    <a href="{% url 'catalog:category_list' %}" class="btn btn-primary mb-3 btn-lg">Категории</a>
+</div>
 <div class="card mb-4 box-shadow">
     {% for product in products %}
     <div class="card-group">
@@ -8,10 +12,11 @@
             <img src="{{ product.image|media_filter}}">
             <div class="card-body">
                 <h5 class="card-title">
-                    <a href="{% url 'catalog:product_detail' product.id %}">{{product.name}}</a>
+                    <a href="{% url 'catalog:product_detail' product.pk %}">{{product.name}}</a>
                 </h5>
                 <p class="card-text">{{ product.description|truncatewords:30|linebreaks }}</p>
-                <p class="card-text"><small class="text-body-secondary">Created at {{ product.created_at | date:"d M Y" }}</small></p>
+                <p class="card-text"><small class="text-body-secondary">Created at
+                    {{ product.created_at | date:"d M Y" }}</small></p>
             </div>
         </div>
     </div>
