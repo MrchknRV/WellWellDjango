@@ -42,7 +42,11 @@ INSTALLED_APPS = [
 
     "catalog",
     "blog.apps.BlogConfig",
+    "users.apps.UsersConfig",
+
 ]
+
+AUTH_USER_MODEL = "users.CustomUser"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
