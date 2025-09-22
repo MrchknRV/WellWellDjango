@@ -1,0 +1,20 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">Создать категорию</h1>
+    </div>
+    <form class="row" method="post" enctype="multipart/form-data">
+        <div class="card-8">
+            <div class="card-body">
+                {% csrf_token %}
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg mt-3">Сохранить</button>
+            <a href="{% url 'catalog:category_list' %}" class="btn btn-secondary btn-lg mt-3">Отменить</a>
+        </div>
+
+
+    </form>
+</div>
+{% endblock %}
