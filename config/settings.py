@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+
+from django.conf.global_settings import AUTH_USER_MODEL
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -42,11 +44,11 @@ INSTALLED_APPS = [
 
     "catalog",
     "blog.apps.BlogConfig",
-    "users.apps.UsersConfig",
+    "clients.apps.ClientsConfig"
 
 ]
 
-AUTH_USER_MODEL = "users.CustomUser"
+AUTH_USER_MODEL = "clients.Client"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
