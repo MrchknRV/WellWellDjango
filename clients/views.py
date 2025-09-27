@@ -31,7 +31,7 @@ class RegisterView(CreateView):
 
 class ClientLoginView(LoginView):
     template_name = "auth/client/login.html"
-    reverse_lazy = reverse_lazy("catalog:product_list")
+    success_url = reverse_lazy("catalog:product_list")
 
 
 class ClientLogoutView(LogoutView):
