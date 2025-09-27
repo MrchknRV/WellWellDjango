@@ -7,14 +7,14 @@ from .models import Post
 class PostModelCreate(CreateView):
     model = Post
     fields = ["title", "body", "image", "status", "is_active"]
-    template_name = 'blog/post/post_form.html'
+    template_name = "blog/post/post_form.html"
     success_url = reverse_lazy("blog:post_list")
 
 
 class PostModelUpdateView(UpdateView):
     model = Post
     fields = ["title", "body", "image", "status"]
-    template_name = 'blog/post/post_form.html'
+    template_name = "blog/post/post_form.html"
 
     def get_success_url(self):
         return reverse("blog:post_detail", args=[self.kwargs.get("pk")])
