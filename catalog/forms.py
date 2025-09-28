@@ -4,15 +4,7 @@ from django.core.exceptions import ValidationError
 
 from .models import Product, Category
 
-EXCLUDE_WORDS = ["казино",
-                 "криптовалюта",
-                 "крипта",
-                 "биржа",
-                 "дешево",
-                 "бесплатно",
-                 "обман",
-                 "полиция",
-                 "радар"]
+EXCLUDE_WORDS = ["казино", "криптовалюта", "крипта", "биржа", "дешево", "бесплатно", "обман", "полиция", "радар"]
 
 
 class ProductForm(forms.ModelForm):
@@ -36,30 +28,30 @@ class ProductForm(forms.ModelForm):
         return price
 
     def clean_image(self):
-        image = self.cleaned_data.get('image')
+        image = self.cleaned_data.get("image")
         if image:
             if image.size > 5 * 1024 * 1024:  # 5 МБ
                 raise forms.ValidationError("Файл не должен превышать 5 MB.")
-            if not (image.name.endswith('.jpg') or image.name.endswith('.jpeg') or image.name.endswith('.png')):
+            if not (image.name.endswith(".jpg") or image.name.endswith(".jpeg") or image.name.endswith(".png")):
                 raise forms.ValidationError("Допустимые форматы: JPEG, PNG.")
         return image
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
-        self.fields['category'].widget.attrs.update({'class': 'form-select'})
+            field.widget.attrs["class"] = "form-control"
+        self.fields["category"].widget.attrs.update({"class": "form-select"})
 
 
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = "__all__"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs["class"] = "form-control"
 
 
 class ContactForm(forms.Form):
