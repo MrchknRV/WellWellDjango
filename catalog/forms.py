@@ -43,6 +43,20 @@ class ProductForm(forms.ModelForm):
         self.fields["category"].widget.attrs.update({"class": "form-select"})
 
 
+class ProductCreateForm(ProductForm):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user")
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        product = super().save(commit=False)
+        if self.user:
+            product.owner = self.user
+        if commit:
+            product.save()
+        return product
+
+
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category

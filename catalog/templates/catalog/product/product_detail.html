@@ -13,7 +13,9 @@
 </div>
 <div class="mt-3">
     <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning btn-lg">Редактировать</a>
+    {% if perms.products.can_delete_product %}
     <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger btn-lg">Удалить</a>
+    {% endif %}
     <a href="{% url 'catalog:product_list' %}" class="btn btn-secondary btn-lg">Назад к списку</a>
 </div>
 {% endblock %}
