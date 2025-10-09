@@ -5,9 +5,9 @@ from config.settings import BASE_DIR
 
 
 class Command(BaseCommand):
-    help = 'Added test product to the BD'
+    help = "Added test product to the BD"
 
     def handle(self, *args, **options):
         Product.objects.all().delete()
         Category.objects.all().delete()
-        call_command('loaddata', BASE_DIR / 'fixtures/test_product_fixture.json')
+        call_command("loaddata", BASE_DIR / "fixtures/test_product_fixture.json")
