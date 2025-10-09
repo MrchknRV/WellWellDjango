@@ -1,5 +1,8 @@
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from catalog.models import Product, Category
+from catalog.models import Product, Category, Status
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
 from django.contrib import messages
@@ -41,7 +44,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['owner'] = self.request.user
+        kwargs["user"] = self.request.user
         return kwargs
 
     def form_valid(self, form):
@@ -58,19 +61,27 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         return reverse("catalog:product_detail", args=[self.kwargs.get("pk")])
 
     def form_valid(self, form):
-        messages.success(self.request, "Продукт успешно создан")
+        messages.success(self.request, "Продукт успешно обновлен")
         return super().form_valid(form)
 
-    def get_object(self):
-        obj = self.get_object()
-        return obj.owner == self.request.user
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
 
-class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
-    permission_required = ['catalog.can_delete_product', "catalog.can_unpublish_product"]
     template_name = "catalog/product/product_delete_confirm.html"
     success_url = reverse_lazy("catalog:product_list")
 
+    def delete_perm(self):
+        product = self.get_object()
+        user = self.request.user
+
+        if product.owner == user:
+            return True
+
+        return user.has_perm("catalog.can_delete_product")
 
 
 class CategoryListView(ListView):
@@ -84,3 +95,33 @@ class CategoryCreateView(CreateView):
     form_class = CategoryForm
     template_name = "catalog/category/category_create.html"
     success_url = reverse_lazy("catalog:category_list")
+
+
+@login_required
+def unpublish_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+
+    if product.owner != request.user and not request.user.has_perm("catalog.can_unpublish_product"):
+        raise PermissionDenied("У вас нет прав для отмены публикации этого продукта")
+
+    product.status = Status.DRAFT
+    product.save()
+    messages.success(request, "Публикация продукта отменена.")
+    return redirect("catalog:product_detail", pk=product.pk)
+
+
+@login_required
+def publish_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+
+    if product.owner != request.user:
+        raise PermissionDenied("У вас нет прав для публикации этого продукта")
+
+    if product.status == Status.DRAFT:
+        product.status = Status.PUBLISHED
+        product.save()
+        messages.success(request, "Продукт успешно опубликован!")
+    else:
+        messages.warning(request, "Продукт уже опубликован.")
+
+    return redirect("catalog:product_detail", pk=product.pk)

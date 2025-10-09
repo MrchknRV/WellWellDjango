@@ -50,7 +50,7 @@ class ProductCreateForm(ProductForm):
 
     def save(self, commit=True):
         product = super().save(commit=False)
-        if self.user:
+        if self.user and not product.pk:
             product.owner = self.user
         if commit:
             product.save()

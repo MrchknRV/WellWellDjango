@@ -31,7 +31,9 @@ class Product(models.Model):
     price = models.PositiveIntegerField(verbose_name="Цена")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата добавление")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
-    status = models.CharField(max_length=2, choices=Status.choices, default=Status.DRAFT, verbose_name="Cтатус публикации")
+    status = models.CharField(
+        max_length=2, choices=Status.choices, default=Status.DRAFT, verbose_name="Cтатус публикации"
+    )
     owner = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name="Автор", blank=True, null=True)
 
     def __str__(self):
