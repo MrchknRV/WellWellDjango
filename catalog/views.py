@@ -48,6 +48,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
+        form.instance.owner = self.request.user
         messages.success(self.request, "Продукт успешно создан")
         return super().form_valid(form)
 
