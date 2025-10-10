@@ -10,7 +10,7 @@ EXCLUDE_WORDS = ["казино", "криптовалюта", "крипта", "б
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        exclude = ["created_at", "updated_at"]
+        exclude = ["created_at", "updated_at", "owner"]
 
     def clean(self):
         cleaned_data = super().clean()
@@ -41,6 +41,20 @@ class ProductForm(forms.ModelForm):
         for field in self.fields.values():
             field.widget.attrs["class"] = "form-control"
         self.fields["category"].widget.attrs.update({"class": "form-select"})
+
+
+class ProductCreateForm(ProductForm):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user")
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        product = super().save(commit=False)
+        if self.user and not product.pk:
+            product.owner = self.user
+        if commit:
+            product.save()
+        return product
 
 
 class CategoryForm(forms.ModelForm):
