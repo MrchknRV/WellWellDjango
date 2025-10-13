@@ -1,13 +1,15 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse_lazy, reverse
-from catalog.models import Product, Category, Status
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
-from django.contrib import messages
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView, UpdateView
+
+from catalog.models import Category, Product, Status
+
 from .forms import CategoryForm, ContactForm, ProductCreateForm
-from .mixins import OwnerRequiredMixin, ProductOwnerQuerysetMixin, OwnerOrModeratorMixins
+from .mixins import OwnerOrModeratorMixins, OwnerRequiredMixin, ProductOwnerQuerysetMixin
 
 
 class ContactsTemplateView(FormView):
