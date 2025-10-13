@@ -3,17 +3,125 @@
 {% load tags %}
 {% block content %}
 <div class="container mt-5">
-    <img src="{{ product.image| media_filter }}">
-    <h2>{{ product.name }}</h2>
-    <p>Категория: {{ product.category }}</p>
-    <p>Описание: {{ product.description | linebreaks }}</p>
-    <p>Цена: {{ product.price }}</p>
-    <p>Дата создания: {{ product.created_at }}</p>
-    <p>Дата обновления: {{ product.update_at }}</p>
-</div>
-<div class="mt-3">
-    <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning btn-lg">Редактировать</a>
-    <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger btn-lg">Удалить</a>
-    <a href="{% url 'catalog:product_list' %}" class="btn btn-secondary btn-lg">Назад к списку</a>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title mb-0">{{ product.name }}</h2>
+                </div>
+                <div class="card-body">
+                    {% if product.image %}
+                    <div class="text-center mb-4">
+                        <img src="{{ product.image|media_filter }}" class="img-fluid rounded" alt="{{ product.name }}" style="max-height: 400px;">
+                    </div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <span class="badge {% if product.status == 'PB' %}bg-success{% else %}bg-secondary{% endif %} fs-6">
+                            Статус: {{ product.get_status_display }}
+                        </span>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Категория:</strong>
+                            <p class="mb-1">{{ product.category.name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Цена:</strong>
+                            <p class="mb-1">{{ product.price }} ₽</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Описание:</strong>
+                        <p class="mb-1">{{ product.description|linebreaks }}</p>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Владелец:</strong>
+                            <p class="mb-1">{{ product.owner.username|default:"Не указан" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Дата создания:</strong>
+                            <p class="mb-1">{{ product.created_at|date:"d.m.Y H:i" }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Дата обновления:</strong>
+                            <p class="mb-0">{{ product.updated_at|date:"d.m.Y H:i" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Действия</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        {% if product.owner == user %}
+                        <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning btn-lg">
+                            Редактировать
+                        </a>
+                        {% endif %}
+
+                        {% if product.owner == user or perms.catalog.delete_product %}
+                        <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger btn-lg">
+                            Удалить
+                        </a>
+                        {% endif %}
+
+                        {% if product.status == 'PB' %}
+                            {% if product.owner == user or perms.catalog.can_unpublish_product %}
+                            <form method="post" action="{% url 'catalog:unpublish_product' product.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-warning btn-lg w-100">
+                                    Снять с публикации
+                                </button>
+                            </form>
+                            {% endif %}
+                        {% else %}
+                            {% if product.owner == user or perms.catalog.can_publish_product %}
+                            <form method="post" action="{% url 'catalog:publish_product' product.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success btn-lg w-100">
+                                    Опубликовать
+                                </button>
+                            </form>
+                            {% endif %}
+                        {% endif %}
+
+                        <a href="{% url 'catalog:product_list' %}" class="btn btn-secondary btn-lg">
+                            <- Назад к списку
+                        </a>
+                    </div>
+
+                    {% if product.owner != user and perms.catalog.delete_product %}
+                    <div class="alert alert-warning mt-3" role="alert">
+                        <small>
+                            <strong>Вы действуете как модератор</strong><br>
+                            Этот продукт принадлежит пользователю: <strong>{{ product.owner.username }}</strong>
+                        </small>
+                    </div>
+                    {% endif %}
+
+                    {% if product.owner == user %}
+                    <div class="alert alert-info mt-3" role="alert">
+                        <small>
+                            <strong>Вы владелец этого продукта</strong><br>
+                            Вы можете редактировать, удалять и управлять публикацией.
+                        </small>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

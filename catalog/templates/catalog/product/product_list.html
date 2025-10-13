@@ -7,19 +7,85 @@
     {% endif %}
     <a href="{% url 'catalog:category_list' %}" class="btn btn-primary mb-3 btn-lg">Категории</a>
 </div>
+
 <div class="card mb-4 box-shadow">
     {% for product in products %}
-    <div class="card-group">
-        <div class="card">
-            <img src="{{ product.image|media_filter}}">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <a href="{% url 'catalog:product_detail' product.pk %}">{{product.name}}</a>
-                </h5>
-                <p class="card-text">{{ product.description|truncatewords:30|linebreaks }}</p>
-                <p class="card-text"><small class="text-body-secondary">Created at
-                    {{ product.created_at | date:"d M Y" }}</small></p>
+    <div class="card mb-3">
+        <div class="row g-0">
+            {% if product.image %}
+            <div class="col-md-3">
+                <img src="{{ product.image|media_filter }}" class="img-fluid rounded-start" alt="{{ product.name }}">
             </div>
+            {% endif %}
+
+            <div class="col-md-{% if product.image %}9{% else %}12{% endif %}">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="card-title">
+                            <a href="{% url 'catalog:product_detail' product.pk %}" class="text-decoration-none">
+                                {{ product.name }}
+                            </a>
+                        </h5>
+                        <span class="badge {% if product.status == 'PB' %}bg-success{% else %}bg-secondary{% endif %}">
+                            {{ product.get_status_display }}
+                        </span>
+                    </div>
+                    <p class="card-text">{{ product.description|truncatewords:30|linebreaks }}</p>
+
+                    <div class="row text-muted small mb-2">
+                        <div class="col-md-4">
+                            <strong>Цена:</strong> {{ product.price }} ₽
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Категория:</strong> {{ product.category.name }}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Владелец:</strong> {{ product.owner.username|default:"Не указан" }}
+                        </div>
+                    </div>
+
+                    <p class="card-text">
+                        <small class="text-body-secondary">
+                            Создан: {{ product.created_at|date:"d M Y" }} |
+                            Обновлен: {{ product.updated_at|date:"d M Y" }}
+                        </small>
+                    </p>
+                    <div class="btn-group" role="group">
+                        <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-outline-primary btn-sm">
+                            Просмотр
+                        </a>
+                        {% if product.owner == user %}
+                        <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-outline-secondary btn-sm">
+                            Редактировать
+                        </a>
+                        {% endif %}
+                        {% if product.owner == user or perms.catalog.delete_product %}
+                        <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-outline-danger btn-sm">
+                            Удалить
+                        </a>
+                        {% endif %}
+                        {% if product.status == 'PB' and product.owner == user or product.status == 'PB' and perms.catalog.can_unpublish_product %}
+                        <form method="post" action="{% url 'catalog:unpublish_product' product.pk %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-warning btn-sm">
+                                Снять с публикации
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            <h5>Продукты не найдены</h5>
+            {% if user.is_authenticated %}
+            <p>Создайте первый продукт, нажав на кнопку "Создать новый товар"</p>
+            {% else %}
+            <p>Войдите в систему, чтобы увидеть свои продукты</p>
+            {% endif %}
         </div>
     </div>
     {% endfor %}

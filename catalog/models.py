@@ -1,4 +1,6 @@
 from django.db import models
+from clients.models import Client
+from django.urls import reverse
 
 
 class Category(models.Model):
@@ -14,6 +16,11 @@ class Category(models.Model):
         ordering = ["name"]
 
 
+class Status(models.TextChoices):
+    DRAFT = "DR", "Draft"
+    PUBLISHED = "PB", "Published"
+
+
 class Product(models.Model):
     name = models.CharField(max_length=150, verbose_name="Продукт")
     description = models.TextField(verbose_name="Описание")
@@ -24,6 +31,10 @@ class Product(models.Model):
     price = models.PositiveIntegerField(verbose_name="Цена")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата добавление")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
+    status = models.CharField(
+        max_length=2, choices=Status.choices, default=Status.DRAFT, verbose_name="Cтатус публикации"
+    )
+    owner = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name="Автор", blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -32,3 +43,10 @@ class Product(models.Model):
         verbose_name = "продукт"
         verbose_name_plural = "продукты"
         ordering = ["-created_at"]
+        permissions = [
+            ("can_unpublish_product", "Can unpublish product"),
+            ("can_publish_product", "Can publish product"),
+        ]
+
+    def get_absolute_url(self):
+        return reverse("catalog:product_detail", kwargs={"pk": self.pk})
