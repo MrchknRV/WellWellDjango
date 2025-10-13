@@ -87,7 +87,7 @@
                             </form>
                             {% endif %}
                         {% else %}
-                            {% if product.owner == user %}
+                            {% if product.owner == user or perms.catalog.can_publish_product %}
                             <form method="post" action="{% url 'catalog:publish_product' product.pk %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-success btn-lg w-100">

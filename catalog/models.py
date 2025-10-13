@@ -45,6 +45,7 @@ class Product(models.Model):
         ordering = ["-created_at"]
         permissions = [
             ("can_unpublish_product", "Can unpublish product"),
+            ("can_publish_product", "Can publish product"),
         ]
 
     def get_absolute_url(self):

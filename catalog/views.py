@@ -3,10 +3,11 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from catalog.models import Product, Category, Status
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
 from django.contrib import messages
 from .forms import CategoryForm, ContactForm, ProductCreateForm
+from .mixins import OwnerRequiredMixin, ProductOwnerQuerysetMixin, OwnerOrModeratorMixins
 
 
 class ContactsTemplateView(FormView):
@@ -15,21 +16,13 @@ class ContactsTemplateView(FormView):
     success_url = reverse_lazy("catalog:contacts")
 
 
-class ProductListView(ListView):
+class ProductListView(ProductOwnerQuerysetMixin, ListView):
     model = Product
     template_name = "catalog/product/product_list.html"
     context_object_name = "products"
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        if self.request.user.is_authenticated:
-            if self.request.user.has_perm("catalog.can_delete_product"):
-                return queryset
-            return queryset.filter(owner=self.request.user)
-        return queryset.none()
 
-
-class ProductDetailView(LoginRequiredMixin, DetailView):
+class ProductDetailView(OwnerOrModeratorMixins, LoginRequiredMixin, DetailView):
     model = Product
     template_name = "catalog/product/product_detail.html"
     context_object_name = "product"
@@ -53,7 +46,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
+class ProductUpdateView(OwnerRequiredMixin, LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductCreateForm
     template_name = "catalog/product/product_form.html"
@@ -70,19 +63,11 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         kwargs["user"] = self.request.user
         return kwargs
 
-class ProductDeleteView(LoginRequiredMixin, DeleteView):
+
+class ProductDeleteView(OwnerOrModeratorMixins, LoginRequiredMixin, DeleteView):
     model = Product
     template_name = "catalog/product/product_delete_confirm.html"
     success_url = reverse_lazy("catalog:product_list")
-
-    def delete_perm(self):
-        product = self.get_object()
-        user = self.request.user
-
-        if product.owner == user:
-            return True
-
-        return user.has_perm("catalog.can_delete_product")
 
 
 class CategoryListView(ListView):
@@ -115,7 +100,7 @@ def unpublish_product(request, pk):
 def publish_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
 
-    if product.owner != request.user:
+    if product.owner != request.user and not request.user.has_perm("catalog.can_publish_product"):
         raise PermissionDenied("У вас нет прав для публикации этого продукта")
 
     if product.status == Status.DRAFT:
