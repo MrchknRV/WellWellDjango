@@ -11,6 +11,11 @@ from catalog.models import Category, Product, Status
 from .forms import CategoryForm, ContactForm, ProductCreateForm
 from .mixins import OwnerOrModeratorMixins, OwnerRequiredMixin, ProductOwnerQuerysetMixin
 
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+
+from .service import ProductListService
+
 
 class ContactsTemplateView(FormView):
     form_class = ContactForm
@@ -23,7 +28,21 @@ class ProductListView(ProductOwnerQuerysetMixin, ListView):
     template_name = "catalog/product/product_list.html"
     context_object_name = "products"
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        category_id = ProductListService.get_category_id(self.request)
+        if category_id:
+            queryset = queryset.filter(category_id=category_id)
+        return queryset
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = ProductListService.get_categories()
+        context['selected_category'] = ProductListService.get_selected_categories(self.request)
+        return context
+
+
+@method_decorator(cache_page(60 * 10), name="dispatch")
 class ProductDetailView(OwnerOrModeratorMixins, LoginRequiredMixin, DetailView):
     model = Product
     template_name = "catalog/product/product_detail.html"
