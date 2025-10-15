@@ -11,6 +11,7 @@ from catalog.models import Category, Product, Status
 from .forms import CategoryForm, ContactForm, ProductCreateForm
 from .mixins import OwnerOrModeratorMixins, OwnerRequiredMixin, ProductOwnerQuerysetMixin
 
+from django.core.cache import cache
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 
@@ -29,7 +30,10 @@ class ProductListView(ProductOwnerQuerysetMixin, ListView):
     context_object_name = "products"
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = cache.get("products_queryset")
+        if not queryset:
+            queryset = super().get_queryset()
+            cache.set("products_queryset", queryset, 60 * 10)
         category_id = ProductListService.get_category_id(self.request)
         if category_id:
             queryset = queryset.filter(category_id=category_id)
