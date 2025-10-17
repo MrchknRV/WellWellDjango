@@ -1,6 +1,7 @@
 from django.db import models
-from clients.models import Client
 from django.urls import reverse
+
+from clients.models import Client
 
 
 class Category(models.Model):

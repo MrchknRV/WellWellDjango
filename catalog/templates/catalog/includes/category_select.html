@@ -1,0 +1,24 @@
+<div class="container mb-4">
+    <form method="get" class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="categorySelect" class="col-form-label">Выбрать категорию:</label>
+        </div>
+        <div class="col-auto">
+            <select name="category" id="categorySelect" class="form-select" onchange="this.form.submit()">
+                <option value="">Все категории</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}"
+                    {% if selected_category == category.id|stringformat:"i" %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-auto">
+      <!--     <button type="submit" class="btn btn-outline-primary">Применить</button> -->
+            {% if selected_category %}
+            <a href="{% url 'catalog:product_list' %}" class="btn btn-outline-secondary">Сбросить</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
