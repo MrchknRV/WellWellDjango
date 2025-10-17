@@ -1,8 +1,8 @@
 from django import forms
-from django.forms import Textarea
 from django.core.exceptions import ValidationError
+from django.forms import Textarea
 
-from .models import Product, Category
+from .models import Category, Product
 
 EXCLUDE_WORDS = ["казино", "криптовалюта", "крипта", "биржа", "дешево", "бесплатно", "обман", "полиция", "радар"]
 

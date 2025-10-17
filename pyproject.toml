@@ -29,6 +29,10 @@ python-dotenv = "^1.1.1"
 pillow = "^11.3.0"
 ipython = "^9.5.0"
 
+
+[tool.poetry.group.cache.dependencies]
+redis = "^6.4.0"
+
 [tool.black]
 line-length = 119
 exclude = "venv"

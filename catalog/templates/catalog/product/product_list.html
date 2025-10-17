@@ -2,11 +2,16 @@
 {% load tags %}
 {% block content %}
 <div class="container mt-4">
-    {% if user.is_authenticated %}
-    <a href="{% url 'catalog:product_create' %}" class="btn btn-primary mb-3 btn-lg">Создать новый товар</a>
-    {% endif %}
-    <a href="{% url 'catalog:category_list' %}" class="btn btn-primary mb-3 btn-lg">Категории</a>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            {% if user.is_authenticated %}
+            <a href="{% url 'catalog:product_create' %}" class="btn btn-primary me-2">Создать новый товар</a>
+            {% endif %}
+            <a href="{% url 'catalog:category_list' %}" class="btn btn-secondary">Категории</a>
+        </div>
+    </div>
 </div>
+{% include 'catalog/includes/category_select.html' %}
 
 <div class="card mb-4 box-shadow">
     {% for product in products %}
@@ -55,7 +60,8 @@
                             Просмотр
                         </a>
                         {% if product.owner == user %}
-                        <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-outline-secondary btn-sm">
+                        <a href="{% url 'catalog:product_update' product.pk %}"
+                           class="btn btn-outline-secondary btn-sm">
                             Редактировать
                         </a>
                         {% endif %}
